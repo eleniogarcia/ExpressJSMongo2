@@ -1,30 +1,31 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv').config();
-
 const app = express();
-const port = process.env.PUERTO || 3002;
 
-// Middleware para manejar JSON
+const port = process.env.PUERTO || 3001;
+// Middleware para parsear JSON
 app.use(express.json());
 
-// Importar las rutas
-const tasksRouter = require("./routes/tasksRouter");
-app.use("/tasks", tasksRouter);
+// Rutas
+const tasksRouter = require('./routes/tasksRouter');
+const authRouter = require('./routes/authRouter');
 
-// Ruta de prueba
+app.use('/tasks', tasksRouter);
+app.use('/auth', authRouter);
+
 app.get('/', (req, res) => {
-    res.send('Hello!');
+  res.send('API funcionando');
 });
 
-// Conectar a MongoDB
 mongoose.connect(process.env.MONGOCONEXION)
-    .then(() => {
-        console.log("Conectado a MongoDB");
-        app.listen(port, () => {
-            console.log(`Servidor escuchando en el puerto ${port}`);
-        });
-    })
-    .catch((error) => {
-        console.error("Error de conexión:", error);
+  .then(() => {
+    console.log(`Conectado a MongoDB y servidor corriendo en el puerto ${port}`);
+    app.listen(port, () => {
+      console.log(`Servidor corriendo en el puerto ${port}`);
     });
+  })
+  .catch((error) => {
+    console.error('Error al conectar a MongoDB:', error);
+  });
+

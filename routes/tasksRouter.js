@@ -1,20 +1,12 @@
-const express = require('express');
+const express = require('express'); 
 const router = express.Router();
-const taskController = require('../controller/task'); // Asegúrate de que la ruta sea correcta
+const taskController = require('../controller/task'); // Corregir la importación
+const { authMiddleware } = require('../middlewar/authMiddleware');
 
-// Ruta para obtener todas las tareas
-router.get('/', taskController.getAllTasks);
-
-// Ruta para obtener una tarea por ID
-router.get('/:id', taskController.getTaskById);
-
-// Ruta para crear una nueva tarea
-router.post('/', taskController.createTask);
-
-// Ruta para actualizar una tarea por ID
-router.put('/:id', taskController.updateTask);
-
-// Ruta para eliminar una tarea por ID
-router.delete('/:id', taskController.deleteTask);
+router.get('/', authMiddleware, taskController.getAllTasks);
+router.get('/:id', authMiddleware, taskController.getTaskById);
+router.post('/', authMiddleware, taskController.createTask);
+router.put('/:id', authMiddleware, taskController.updateTask);
+router.delete('/:id', authMiddleware, taskController.deleteTask);
 
 module.exports = router;
